@@ -2745,7 +2745,7 @@ document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 //  NUTRANOIR BACKEND INTEGRATION
 // ═══════════════════════════════════════════════════════════
 
-const API = window.location.port === '3000' ? '/api' : 'http://localhost:3000/api';
+const API = window.location.hostname === 'localhost' ? 'http://localhost:3000/api' : 'https://nutranoir-production.up.railway.app/api';
 
 // ─── AUTH STATE ───────────────────────────────────────────
 let currentUser = null;
