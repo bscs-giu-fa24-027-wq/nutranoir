@@ -78,17 +78,24 @@ router.post('/create', verifyToken, async (req, res) => {
     const customerName = userData?.name || 'Valued Customer';
     const customerEmail = userData?.email;
 
-    // ── SEND NOTIFICATIONS ────────────────────────────────
-    console.log('\n📧 Sending notifications for order:', order_ref);
-    await sendCustomerOrderEmail(order, customerEmail, customerName);
-    await sendAdminOrderEmail(order, customerName, customerEmail);
-    await sendOrderNotificationWhatsApp(order, customerName, customerEmail);
-
+    // ── SEND NOTIFICATIONS (background - don't block response) ──
     res.status(201).json({
       success: true,
       order_id: order.id,
       order_ref: order.order_ref,
       message: 'Order created successfully!'
+    });
+
+    // Send notifications in background (non-blocking)
+    setImmediate(async () => {
+      try {
+        console.log('\n📧 Sending notifications for order:', order_ref);
+        await sendCustomerOrderEmail(order, customerEmail, customerName);
+        await sendAdminOrderEmail(order, customerName, customerEmail);
+        await sendOrderNotificationWhatsApp(order, customerName, customerEmail);
+      } catch (notifErr) {
+        console.error('Notification error (non-critical):', notifErr.message);
+      }
     });
 
   } catch (err) {
