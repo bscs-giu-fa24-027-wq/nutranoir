@@ -9,7 +9,7 @@ const sendBrevoEmail = async (to, toName, subject, htmlContent) => {
   }
 
   const data = JSON.stringify({
-    sender: { name: 'NutraNoir', email: 'b04186001@smtp-brevo.com' },
+    sender: { name: 'NutraNoir', email: 'shahidburhan37@gmail.com' },
     to: [{ email: to, name: toName }],
     subject,
     htmlContent
